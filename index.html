@@ -19,17 +19,26 @@
 
   <!-- Modal Form Dialog Component -->
   <dialog id="book-dialog">
-    <form id="book-form" method="dialog">
+    <form id="book-form" method="dialog" novalidate>
       <h2>Enter Book Details</h2>
       
-      <label for="title">Book Title:</label>
-      <input type="text" id="title" required placeholder="e.g. The Hobbit">
+      <div class="form-control">
+        <label for="title">Book Title:</label>
+        <input type="text" id="title" required placeholder="e.g. The Hobbit">
+        <span class="error" aria-live="polite"></span>
+      </div>
 
-      <label for="author">Author:</label>
-      <input type="text" id="author" required placeholder="e.g. J.R.R. Tolkien">
+      <div class="form-control">
+        <label for="author">Author:</label>
+        <input type="text" id="author" required placeholder="e.g. J.R.R. Tolkien">
+        <span class="error" aria-live="polite"></span>
+      </div>
 
-      <label for="pages">Number of Pages:</label>
-      <input type="number" id="pages" required min="1" placeholder="310">
+      <div class="form-control">
+        <label for="pages">Number of Pages:</label>
+        <input type="number" id="pages" required min="1" placeholder="310">
+        <span class="error" aria-live="polite"></span>
+      </div>
 
       <div class="checkbox-container">
         <input type="checkbox" id="isRead">
