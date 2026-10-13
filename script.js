@@ -219,32 +219,74 @@ const bookDialog = document.getElementById("book-dialog");
 const bookForm = document.getElementById("book-form");
 const cancelBtn = document.getElementById("cancel-btn");
 
+// Input Elements
+const titleInput = document.getElementById("title");
+const authorInput = document.getElementById("author");
+const pagesInput = document.getElementById("pages");
+
+// Validation helper function
+function showError(input, customMissingMessage) {
+  const errorSpan = input.nextElementSibling; // Selects the span right below the input
+
+  if (input.validity.valueMissing) {
+    errorSpan.textContent = customMissingMessage;
+    input.classList.add("invalid");
+    return false;
+  } else if (input.validity.rangeUnderflow) {
+    errorSpan.textContent = `The book must have at least ${input.min} page(s).`;
+    input.classList.add("invalid");
+    return false;
+  } else {
+    // Input is valid: clear errors
+    errorSpan.textContent = "";
+    input.classList.remove("invalid");
+    return true;
+  }
+}
+
+// Check validity dynamically as the user types
+titleInput.addEventListener("input", () => showError(titleInput, "The book title must be filled!"));
+authorInput.addEventListener("input", () => showError(authorInput, "The author name must be filled!"));
+pagesInput.addEventListener("input", () => showError(pagesInput, "The page count must be filled!"));
+
 // Open dialog modal
 newBookBtn.addEventListener("click", () => {
   bookDialog.showModal();
 });
 
-// Close dialog modal without action
+// Close dialog modal and wipe any leftover validation errors
 cancelBtn.addEventListener("click", () => {
   bookDialog.close();
   bookForm.reset();
+  
+  // Clear error spans and invalid classes on cancel
+  document.querySelectorAll('.error').forEach(span => span.textContent = "");
+  document.querySelectorAll('input').forEach(input => input.classList.remove("invalid"));
 });
 
-// Handle form submission
+// Handle form submission with custom validation check
 bookForm.addEventListener("submit", (e) => {
-  e.preventDefault(); // Prevent page refresh
+  e.preventDefault(); // Always prevent default to handle everything via JS
 
-  const title = document.getElementById("title").value;
-  const author = document.getElementById("author").value;
-  const pages = parseInt(document.getElementById("pages").value, 10);
+  // Run validation on all fields before submitting
+  const isTitleValid = showError(titleInput, "The book title must be filled!");
+  const isAuthorValid = showError(authorInput, "The author name must be filled!");
+  const isPagesValid = showError(pagesInput, "The page count must be filled!");
+
+  // If any field is invalid, stop the function early
+  if (!isTitleValid || !isAuthorValid || !isPagesValid) {
+    return;
+  }
+
+  // If everything is valid, gather data and create the book
+  const title = titleInput.value;
+  const author = authorInput.value;
+  const pages = parseInt(pagesInput.value, 10);
   const isRead = document.getElementById("isRead").checked;
 
   addBookToLibrary(title, author, pages, isRead);
 
-  bookForm.reset(); // Clear inputs for next time
-  bookDialog.close(); // Close modal
+  bookForm.reset();
+  bookDialog.close();
 });
 
-// Manually seed sample books for initial testing
-addBookToLibrary("The Hobbit", "J.R.R. Tolkien", 295, true);
-addBookToLibrary("1984", "George Orwell", 328, false);

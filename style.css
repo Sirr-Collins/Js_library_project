@@ -111,3 +111,25 @@ input[type="text"], input[type="number"] {
 
 #cancel-btn { background-color: #e2e8f0; padding: 0.5rem 1rem; }
 #submit-btn { background-color: var(--primary); color: white; padding: 0.5rem 1rem; }
+
+
+/* Form Validation Styles */
+.form-control {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.error {
+  color: #ef4444; /* Red */
+  font-size: 0.85rem;
+  font-weight: 500;
+  min-height: 1.2rem; /* Reserves space so the form doesn't jump */
+}
+
+/* Optional: Outline inputs in red when they are invalid and the user has interacted */
+input.invalid {
+  border-color: #ef4444;
+  outline-color: #ef4444;
+}
